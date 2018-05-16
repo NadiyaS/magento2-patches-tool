@@ -87,7 +87,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         if ($jsonFile->exists()
             && isset($jsonFile->read()['extra']['patches'])
         ) {
-            foreach ($jsonFile->read()['extra']['patches'] as $packageName) {
+            foreach (array_keys($jsonFile->read()['extra']['patches']) as $packageName ) {
                 $applyCommand->run(
                     new ArrayInput([
                         '--' . Apply::OPTION_PACKAGE_NAME => $packageName,
@@ -99,7 +99,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    private function getPackageVersion(string $packageName)
+    /**
+     * @param string $packageName
+     * @return string
+     */
+    private function getPackageVersion(string $packageName): string
     {
         $localRepo = $this->composer->getRepositoryManager()->getLocalRepository();
 
