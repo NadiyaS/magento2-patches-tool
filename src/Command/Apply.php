@@ -116,8 +116,6 @@ class Apply extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Patching started.');
-
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_PACKAGE_NAME),
             $input->getOption(self::OPTION_PACKAGE_VERSION)
@@ -147,6 +145,7 @@ class Apply extends Command
 
         /** @var Patch $patch */
         foreach ($patches as $patch) {
+            $output->writeln('Patching started.');
             if (isset($this->actionPool[$patch->getAction()])) {
                 $action = $this->actionPool[$patch->getAction()];
                 try {
@@ -165,8 +164,7 @@ class Apply extends Command
             } else {
                 $output->writeln($patch->getAction() . ' action could not be found.');
             }
+            $output->writeln('Patching finished.');
         }
-
-        $output->writeln('Patching finished.');
     }
 }
