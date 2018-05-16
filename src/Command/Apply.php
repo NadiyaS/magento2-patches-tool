@@ -143,9 +143,13 @@ class Apply extends Command
             $input->getOption(Apply::OPTION_APPLY_FROM)
         );
 
+        if ($patches) {
+            $output->writeln('Patching started.');
+        }
+
         /** @var Patch $patch */
         foreach ($patches as $patch) {
-            $output->writeln('Patching started.');
+
             if (isset($this->actionPool[$patch->getAction()])) {
                 $action = $this->actionPool[$patch->getAction()];
                 try {
@@ -164,6 +168,9 @@ class Apply extends Command
             } else {
                 $output->writeln($patch->getAction() . ' action could not be found.');
             }
+        }
+
+        if ($patches) {
             $output->writeln('Patching finished.');
         }
     }
