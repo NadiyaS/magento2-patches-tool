@@ -94,7 +94,7 @@ class Remove extends Command
         $instance = $this->instanceProvider->getRootInstance();
 
         $patches = $this->lockStorageFactory->create($instance)->get($package);
-        foreach ($patches as $patch) {
+        foreach (array_reverse($patches) as $patch) {
             $this->revertAction->execute($patch, $instance);
             $output->writeln(sprintf('Patch  %s has been reverted.', $patch->getName()));
         }
