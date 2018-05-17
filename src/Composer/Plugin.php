@@ -13,7 +13,7 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use Installer\PackageEvents;
+use Composer\Installer\PackageEvents;
 use Magento\SetPatches\Command\Apply;
 use Magento\SetPatches\Command\RestoreLock;
 use Symfony\Component\Console\Input\ArrayInput;
