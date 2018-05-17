@@ -32,7 +32,7 @@
     }
   },
   "bin": [
-    "src/m2-patch-tool"
+    "m2-patch-tool"
   ],
   "extra": {
     "class": "\\Magento\\SetPatches\\Composer\\Plugin"

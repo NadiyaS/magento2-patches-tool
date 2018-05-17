@@ -59,8 +59,7 @@ class PatchInstaller extends LibraryInstaller
         $backupCommand = $this->getApplication()->find(BackupPatch::NAME);
         $backupCommand->run(
             new ArrayInput([
-                '--' . Apply::OPTION_PACKAGE_NAME => $target->getName(),
-                '--' . Apply::OPTION_PACKAGE_VERSION => $target->getVersion()
+                '--' . Apply::OPTION_PACKAGE_NAME => $target->getName()
             ]),
             $output
         );
@@ -85,8 +84,7 @@ class PatchInstaller extends LibraryInstaller
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $input = new ArrayInput([
-            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName(),
-            '--' . Apply::OPTION_PACKAGE_VERSION => $package->getVersion()
+            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName()
         ]);
         $output = new ConsoleOutput();
 
@@ -99,12 +97,14 @@ class PatchInstaller extends LibraryInstaller
         $applyCommand->run($input, $output);
     }
 
-
+    /**
+     * @param InstalledRepositoryInterface $repo
+     * @param PackageInterface $package
+     */
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $input = new ArrayInput([
-            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName(),
-            '--' . Apply::OPTION_PACKAGE_VERSION => $package->getVersion()
+            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName()
         ]);
         $output = new ConsoleOutput();
 
@@ -116,8 +116,7 @@ class PatchInstaller extends LibraryInstaller
         $removeCommand = $this->getApplication(true)->find(Remove::NAME);
         $removeCommand->run(
             new ArrayInput([
-                '--' . Apply::OPTION_PACKAGE_NAME => $package->getName(),
-                '--' . Apply::OPTION_PACKAGE_VERSION => $package->getVersion()
+                '--' . Apply::OPTION_PACKAGE_NAME => $package->getName()
             ]),
             $output
         );
