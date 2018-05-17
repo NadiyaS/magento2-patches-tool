@@ -18,6 +18,7 @@ use Magento\SetPatches\Command\RestoreLock;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Magento\SetPatches\Application;
+use Magento\SetPatches\Command\BackupLock;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -51,6 +52,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            ScriptEvents::PRE_UPDATE_CMD => [
+                ['onPreUpdate', 0]
+            ],
             ScriptEvents::POST_UPDATE_CMD => [
                 ['onPostInstallUpdate', 10],
                 ['onPostUpdate', 0]
@@ -66,11 +70,19 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostInstallUpdate(Event $event)
     {
-        $output = new ConsoleOutput();
-
         $application = new \Magento\SetPatches\Application();
         $restoreCommand = $application->find(RestoreLock::NAME);
-        $restoreCommand->run(new ArrayInput([]), $output);
+        $restoreCommand->run(new ArrayInput([]), new ConsoleOutput());
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function onPreUpdate(Event $event)
+    {
+        $application = new Application();
+        $backupLockCommand = $application->find(BackupLock::NAME);
+        $backupLockCommand->run(new ArrayInput([]), new ConsoleOutput());
     }
 
     /**
@@ -90,6 +102,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             foreach (array_keys($jsonFile->read()['extra']['patches']) as $packageName ) {
                 $applyCommand->run(
                     new ArrayInput([
+                        '--' . Apply::OPTION_APPLY_FROM => 'json',
                         '--' . Apply::OPTION_PACKAGE_NAME => $packageName,
                         '--' . Apply::OPTION_PACKAGE_VERSION => $this->getPackageVersion($packageName)
                     ]),

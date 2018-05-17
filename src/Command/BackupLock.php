@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 
-class RestoreLock extends Command
+class BackupLock extends Command
 {
-    const NAME = 'restoreLock';
+    const NAME = 'backupLock';
 
     /**
      * @var JsonFile
@@ -42,7 +42,7 @@ class RestoreLock extends Command
     protected function configure()
     {
         $this->setName(static::NAME)
-            ->setDescription('Restore lock file');
+            ->setDescription('Backup lock file');
 
         parent::configure();
     }
@@ -54,17 +54,10 @@ class RestoreLock extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->rootTmpLockFile->exists()) {
+        if ($this->rootTmpLockFile->exists()) {
             return 0;
         }
-
-        $this->rootLockFile->write(
-            array_replace_recursive(
-                $this->rootLockFile->read(),
-                $this->rootTmpLockFile->read()
-            )
-        );
-        unlink($this->rootTmpLockFile->getPath());
+        $this->rootTmpLockFile->write($this->rootLockFile->read());
         return 0;
     }
 }

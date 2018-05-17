@@ -11,6 +11,7 @@ use Composer\IO\BufferIO;
 use Composer\Json\JsonFile;
 use Illuminate\Container\Container;
 use Magento\SetPatches\Command\Apply;
+use Magento\SetPatches\Command\BackupLock;
 use Magento\SetPatches\Command\BackupPatch;
 use Magento\SetPatches\Command\CheckMerged;
 use Magento\SetPatches\Command\FindRequirePatches;
@@ -38,6 +39,7 @@ class Application extends \Symfony\Component\Console\Application
     private $commands = [
         Apply::class,
         RestoreLock::class,
+        BackupLock::class,
         FindRequirePatches::class,
         CheckMerged::class,
         BackupPatch::class,
@@ -94,6 +96,16 @@ class Application extends \Symfony\Component\Console\Application
 
         $this->container->singleton(RestoreLock::class, function () use($container) {
             return new RestoreLock(
+                $container->makeWith(JsonFile::class, [
+                    'path' => PACKAGE_BP . '/../../../composer.lock'
+                ]),
+                $container->makeWith(JsonFile::class, [
+                    'path' => PACKAGE_BP . '/../../../composer.lock.tmp'
+                ])
+            );
+        });
+        $this->container->singleton(BackupLock::class, function () use($container) {
+            return new BackupLock(
                 $container->makeWith(JsonFile::class, [
                     'path' => PACKAGE_BP . '/../../../composer.lock'
                 ]),
