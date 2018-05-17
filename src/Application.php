@@ -54,26 +54,24 @@ class Application extends \Symfony\Component\Console\Application
         if (!defined('PACKAGE_BP')) {
             define('PACKAGE_BP', dirname(__DIR__));
         }
+        if (!defined('BASE_DIR')) {
+            define('BASE_DIR', realpath(__DIR__ . '/../../../..'));
+        }
 
         $container = new Container();
         $this->container = $container;
         $this->container->instance(Container::class, $container);
         $this->container->singleton(ApplyAction::class);
-        $this->container->singleton(Composer::class, function () {
-            $composerFactory = new \Composer\Factory();
 
-            if (defined('BP')) {
-                $baseDir = BP;
-            } else {
-                $baseDir = getcwd() . '/../../..';
-            }
-            return $composerFactory->createComposer(
-                new \Composer\IO\BufferIO(),
-                $baseDir . '/composer.json',
-                false,
-                $baseDir
-            );
-        });
+        $composerFactory = new \Composer\Factory();
+
+        $composer = $composerFactory->createComposer(
+            new \Composer\IO\BufferIO(),
+            BASE_DIR . '/composer.json',
+            false,
+            BASE_DIR
+        );
+        $this->container->singleton(Composer::class, function () use ($composer) {return $composer;});
         $localComposer = Factory::create(
             new BufferIO(),
             PACKAGE_BP . '/composer.json'
@@ -81,12 +79,12 @@ class Application extends \Symfony\Component\Console\Application
 
         $this->container->singleton(Apply::class, function () use ($container) {
             return new Apply(
-                $container->make(Composer::class),
-                $container->make(\Magento\SetPatches\Instance\InstanceProvider::class),
-                $container->make(\Magento\SetPatches\Patch\PatchesProvider::class),
+                $this->container->make(Composer::class),
+                $this->container->make(\Magento\SetPatches\Instance\InstanceProvider::class),
+                $this->container->make(\Magento\SetPatches\Patch\PatchesProvider::class),
                 [
-                    \Magento\SetPatches\Data\Patch::ACTION_APPLY => $container->make(\Magento\SetPatches\Patch\Action\ApplyAction::class),
-                    \Magento\SetPatches\Data\Patch::ACTION_REVERT => $container->make(\Magento\SetPatches\Patch\Action\RevertAction::class),
+                    \Magento\SetPatches\Data\Patch::ACTION_APPLY => $this->container->make(\Magento\SetPatches\Patch\Action\ApplyAction::class),
+                    \Magento\SetPatches\Data\Patch::ACTION_REVERT => $this->container->make(\Magento\SetPatches\Patch\Action\RevertAction::class),
                 ]
             );
         });
