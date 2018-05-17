@@ -19,7 +19,6 @@ class FindRequirePatches extends Command
     const NAME = 'find-require-patches';
     const OPTION_PATCH_ID = 'patch-id';
     const OPTION_SOURCE_PACKAGE = 'source-package';
-    const OPTION_PACKAGE_VERSION = 'package-version';
 
     /**
      * @var Composer
@@ -70,12 +69,6 @@ class FindRequirePatches extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Source package'
-            )
-            ->addOption(
-                self::OPTION_PACKAGE_VERSION,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Package version'
             );
 
         parent::configure();
@@ -90,7 +83,7 @@ class FindRequirePatches extends Command
     {
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_SOURCE_PACKAGE),
-            $input->getOption(self::OPTION_PACKAGE_VERSION)
+            $this->getPackageVersion($input->getOption(self::OPTION_PACKAGE_VERSION))
         );
         $patches = $this->jsonStorage->get($package);
         $newPatchId = $input->getOption(self::OPTION_PATCH_ID);
@@ -140,5 +133,20 @@ class FindRequirePatches extends Command
             );
         }
         return $matches['fileName'] ?? [];
+    }
+
+    /**
+     * @param string $packageName
+     * @return string
+     */
+    private function getPackageVersion(string $packageName): string
+    {
+        $localRepo = $this->composer->getRepositoryManager()->getLocalRepository();
+
+        foreach ($localRepo->getPackages() as $package) {
+            if ($package->getName() === $packageName) {
+                return $package->getVersion();
+            }
+        }
     }
 }

@@ -18,7 +18,6 @@ class BackupPatch extends Command
 {
     const NAME = 'backup-patches';
     const OPTION_PACKAGE_NAME = 'package-name';
-    const OPTION_PACKAGE_VERSION = 'package-version';
 
     /**
      * @var Composer
@@ -53,11 +52,6 @@ class BackupPatch extends Command
                 null,
                 InputArgument::REQUIRED,
                 'Package name'
-            )->addOption(
-                self::OPTION_PACKAGE_VERSION,
-                null,
-                InputArgument::REQUIRED,
-                'Package version'
             );
 
         parent::configure();
@@ -72,7 +66,7 @@ class BackupPatch extends Command
     {
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_PACKAGE_NAME),
-            $input->getOption(self::OPTION_PACKAGE_VERSION)
+            $this->getPackageVersion($input->getOption(self::OPTION_PACKAGE_NAME))
         );
 
         $patchDir = $package->getExtra()['patch-dir'] ?? 'patches';
@@ -91,5 +85,20 @@ class BackupPatch extends Command
             $destination
         );
 
+    }
+
+    /**
+     * @param string $packageName
+     * @return string
+     */
+    private function getPackageVersion(string $packageName): string
+    {
+        $localRepo = $this->composer->getRepositoryManager()->getLocalRepository();
+
+        foreach ($localRepo->getPackages() as $package) {
+            if ($package->getName() === $packageName) {
+                return $package->getVersion();
+            }
+        }
     }
 }
