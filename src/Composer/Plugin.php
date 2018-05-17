@@ -56,8 +56,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 ['onPreUpdate', 0]
             ],
             ScriptEvents::POST_UPDATE_CMD => [
+                ['onPostInstallUpdate', 20],
+                ['onPostUpdate', 10],
                 ['onPostInstallUpdate', 0],
-                ['onPostUpdate', 10]
             ],
             ScriptEvents::POST_INSTALL_CMD => [
                 ['onPostInstallUpdate', 0]
