@@ -85,8 +85,6 @@ class Remove extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Reverting patches');
-
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_PACKAGE_NAME),
             $this->getPackageVersion( $input->getOption(self::OPTION_PACKAGE_NAME))
@@ -95,12 +93,19 @@ class Remove extends Command
         $instance = $this->instanceProvider->getRootInstance();
 
         $patches = $this->lockStorageFactory->create($instance)->get($package);
+
+        if ($patches) {
+            $output->writeln('Reverting patches');
+        }
         /** @var Patch $patch */
         foreach (array_reverse($patches) as $patch) {
             $this->revertAction->execute($patch, $instance);
             $output->writeln(sprintf('Patch  %s has been reverted.', $patch->getName()));
         }
-        $output->writeln(sprintf('All patches has been reverted.'));
+
+        if ($patches) {
+            $output->writeln(sprintf('All patches has been reverted.'));
+        }
     }
 
     /**
