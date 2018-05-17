@@ -11,8 +11,8 @@ use Magento\SetPatches\Patch\LockStorageFactory;
 use Symfony\Component\Console\Command\Command;
 use Composer\Composer;
 use Magento\SetPatches\Instance\InstanceProvider;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Remove extends Command
@@ -20,7 +20,6 @@ class Remove extends Command
     const NAME = 'remove';
 
     const OPTION_PACKAGE_NAME = 'package-name';
-    const OPTION_PACKAGE_VERSION = 'package-version';
 
     /**
      * @var Composer
@@ -67,17 +66,12 @@ class Remove extends Command
     protected function configure()
     {
         $this->setName(static::NAME)
-            ->setDescription('Applies patches')
+            ->setDescription('Revert all patches')
             ->addOption(
                 self::OPTION_PACKAGE_NAME,
                 null,
-                InputArgument::REQUIRED,
+                InputOption::VALUE_REQUIRED,
                 'Package name'
-            )->addOption(
-                self::OPTION_PACKAGE_VERSION,
-                null,
-                InputArgument::REQUIRED,
-                'Package version'
             );
 
         parent::configure();
@@ -94,7 +88,7 @@ class Remove extends Command
 
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_PACKAGE_NAME),
-            $input->getOption(self::OPTION_PACKAGE_VERSION)
+            $this->getPackageVersion( $input->getOption(self::OPTION_PACKAGE_NAME))
         );
 
         $instance = $this->instanceProvider->getRootInstance();
@@ -105,5 +99,20 @@ class Remove extends Command
             $output->writeln(sprintf('Patch  %s has been reverted.', $patch->getName()));
         }
         $output->writeln(sprintf('All patches has been reverted.'));
+    }
+
+    /**
+     * @param string $packageName
+     * @return string
+     */
+    private function getPackageVersion(string $packageName): string
+    {
+        $localRepo = $this->composer->getRepositoryManager()->getLocalRepository();
+
+        foreach ($localRepo->getPackages() as $package) {
+            if ($package->getName() === $packageName) {
+                return $package->getVersion();
+            }
+        }
     }
 }

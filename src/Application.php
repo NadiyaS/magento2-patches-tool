@@ -68,7 +68,7 @@ class Application extends \Symfony\Component\Console\Application
             $composerFactory = new \Composer\Factory();
             $baseDir = BASE_DIR;
             if (!file_exists(BASE_DIR . '/composer.json')) {
-                $baseDir = getcwd();
+                $baseDir = getcwd() . '/../../../../';
             }
             return $composerFactory->createComposer(
                 new \Composer\IO\BufferIO(),
