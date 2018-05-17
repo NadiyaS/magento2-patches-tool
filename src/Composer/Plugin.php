@@ -61,7 +61,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 ['onPostInstallUpdate', 0],
             ],
             ScriptEvents::POST_INSTALL_CMD => [
-                ['onPostInstallUpdate', 0]
+                ['restoreLock', 0]
+            ],
+            ScriptEvents::POST_PACKAGE_UNINSTALL => [
+                ['restoreLock', 0]
             ],
         ];
     }
@@ -69,7 +72,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @param Event $event
      */
-    public function onPostInstallUpdate(Event $event)
+    public function restoreLock(Event $event)
     {
         $application = new \Magento\SetPatches\Application();
         $restoreCommand = $application->find(RestoreLock::NAME);
