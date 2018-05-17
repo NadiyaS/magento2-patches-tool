@@ -54,21 +54,18 @@ class Application extends \Symfony\Component\Console\Application
         if (!defined('PACKAGE_BP')) {
             define('PACKAGE_BP', dirname(__DIR__));
         }
-        if (!defined('BASE_DIR')) {
-            define('BASE_DIR', getcwd());
-        }
 
         $container = new Container();
         $this->container = $container;
         $this->container->instance(Container::class, $container);
         $this->container->singleton(ApplyAction::class);
-        $this->container->singleton(RevertAction::class);
-
         $this->container->singleton(Composer::class, function () {
             $composerFactory = new \Composer\Factory();
-            $baseDir = BASE_DIR;
-            if (!file_exists(BASE_DIR . '/composer.json')) {
-                $baseDir = getcwd() . '/../../../../';
+
+            if (defined('BP')) {
+                $baseDir = BP;
+            } else {
+                $baseDir = getcwd() . '/../../..';
             }
             return $composerFactory->createComposer(
                 new \Composer\IO\BufferIO(),
@@ -77,11 +74,11 @@ class Application extends \Symfony\Component\Console\Application
                 $baseDir
             );
         });
-
         $localComposer = Factory::create(
             new BufferIO(),
             PACKAGE_BP . '/composer.json'
         );
+
         $this->container->singleton(Apply::class, function () use ($container) {
             return new Apply(
                 $container->make(Composer::class),

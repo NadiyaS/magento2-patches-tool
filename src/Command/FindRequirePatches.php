@@ -83,7 +83,7 @@ class FindRequirePatches extends Command
     {
         $package = $this->composer->getRepositoryManager()->findPackage(
             $input->getOption(self::OPTION_SOURCE_PACKAGE),
-            $this->getPackageVersion($input->getOption(self::OPTION_PACKAGE_VERSION))
+            $this->getPackageVersion($input->getOption(self::OPTION_SOURCE_PACKAGE))
         );
         $patches = $this->jsonStorage->get($package);
         $newPatchId = $input->getOption(self::OPTION_PATCH_ID);

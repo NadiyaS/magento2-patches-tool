@@ -6,6 +6,7 @@
 
 namespace Magento\SetPatches\Command;
 
+use Magento\SetPatches\Data\Patch;
 use Magento\SetPatches\Patch\Action\RevertAction;
 use Magento\SetPatches\Patch\LockStorageFactory;
 use Symfony\Component\Console\Command\Command;
@@ -94,6 +95,7 @@ class Remove extends Command
         $instance = $this->instanceProvider->getRootInstance();
 
         $patches = $this->lockStorageFactory->create($instance)->get($package);
+        /** @var Patch $patch */
         foreach (array_reverse($patches) as $patch) {
             $this->revertAction->execute($patch, $instance);
             $output->writeln(sprintf('Patch  %s has been reverted.', $patch->getName()));
