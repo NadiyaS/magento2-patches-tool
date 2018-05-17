@@ -57,9 +57,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 ['onPreUpdate', 0]
             ],
             ScriptEvents::POST_UPDATE_CMD => [
-                ['onPostInstallUpdate', 20],
+                ['restoreLock', 20],
                 ['onPostUpdate', 10],
-                ['onPostInstallUpdate', 0],
+                ['restoreLock', 0],
             ],
             ScriptEvents::POST_INSTALL_CMD => [
                 ['restoreLock', 0]
