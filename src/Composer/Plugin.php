@@ -13,6 +13,7 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
+use Installer\PackageEvents;
 use Magento\SetPatches\Command\Apply;
 use Magento\SetPatches\Command\RestoreLock;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -63,7 +64,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             ScriptEvents::POST_INSTALL_CMD => [
                 ['restoreLock', 0]
             ],
-            ScriptEvents::POST_PACKAGE_UNINSTALL => [
+            PackageEvents::POST_PACKAGE_UNINSTALL => [
                 ['restoreLock', 0]
             ],
         ];
