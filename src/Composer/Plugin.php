@@ -78,6 +78,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             $restoreCommand = $application->find(RestoreLock::NAME);
             $restoreCommand->run(new ArrayInput([]), new ConsoleOutput());
         } catch (\Exception $e) {
+            $event->stopPropagation();
             return 0;
         }
     }
