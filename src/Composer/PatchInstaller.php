@@ -113,8 +113,6 @@ class PatchInstaller extends LibraryInstaller
         $backupCommand = $this->getApplication()->find(BackupPatch::NAME);
         $backupCommand->run($input, $output);
 
-        parent::uninstall($repo, $package);
-
         $removeCommand = $this->getApplication(true)->find(Remove::NAME);
         $removeCommand->run(
             new ArrayInput([
@@ -122,5 +120,7 @@ class PatchInstaller extends LibraryInstaller
             ]),
             $output
         );
+
+        parent::uninstall($repo, $package);
     }
 }
