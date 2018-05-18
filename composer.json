@@ -30,10 +30,7 @@
     "psr-4": {
       "Magento\\SetPatches\\": "src"
     }
-  },
-  "bin": [
-    "m2-patch-tool"
-  ],
+  }
   "extra": {
     "class": "\\Magento\\SetPatches\\Composer\\Plugin"
   }
