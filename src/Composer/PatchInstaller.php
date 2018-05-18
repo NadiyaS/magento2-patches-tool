@@ -105,7 +105,8 @@ class PatchInstaller extends LibraryInstaller
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $input = new ArrayInput([
-            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName()
+            '--' . Apply::OPTION_PACKAGE_NAME => $package->getName(),
+            '--' . Apply::OPTION_PACKAGE_VERSION => $package->getVersion()
         ]);
         $output = new ConsoleOutput();
 
