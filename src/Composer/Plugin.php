@@ -69,12 +69,17 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
     /**
      * @param \Composer\EventDispatcher\Event $event
+     * @return int
      */
     public function restoreLock(\Composer\EventDispatcher\Event $event)
     {
-        $application = new \Magento\SetPatches\Application();
-        $restoreCommand = $application->find(RestoreLock::NAME);
-        $restoreCommand->run(new ArrayInput([]), new ConsoleOutput());
+        try {
+            $application = new \Magento\SetPatches\Application();
+            $restoreCommand = $application->find(RestoreLock::NAME);
+            $restoreCommand->run(new ArrayInput([]), new ConsoleOutput());
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     /**
