@@ -17,14 +17,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class FindRequirePatches extends Command
 {
     const NAME = 'find-require-patches';
-    const OPTION_PATCH_ID = 'patch-id';
+    const OPTION_PATH_TO_PATCH = 'path-to-patch';
     const OPTION_SOURCE_PACKAGE = 'source-package';
 
     /**
      * @var Composer
      */
     private $composer;
-    
+
     /**
      * @var JsonStorage
      */
@@ -59,10 +59,10 @@ class FindRequirePatches extends Command
         $this->setName(static::NAME)
             ->setDescription('Find require patches for provided patch id')
             ->addOption(
-                self::OPTION_PATCH_ID,
+                self::OPTION_PATH_TO_PATCH,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Patch id'
+                'Path to patch'
             )
             ->addOption(
                 self::OPTION_SOURCE_PACKAGE,
@@ -86,21 +86,14 @@ class FindRequirePatches extends Command
             $this->getPackageVersion($input->getOption(self::OPTION_SOURCE_PACKAGE))
         );
         $patches = $this->jsonStorage->get($package);
-        $newPatchId = $input->getOption(self::OPTION_PATCH_ID);
+        $pathToPatch = $input->getOption(self::OPTION_PATH_TO_PATCH);
 
-        if (!isset($patches[$newPatchId])) {
-            throw new \RuntimeException('Patch with id: ' . $newPatchId . ' is not found');
-        }
-
-        $newPatchFiles = $this->getFiles($patches[$newPatchId]);
+        $newPatchFiles = $this->getFiles($pathToPatch);
 
         $requirePatches = [];
         /** @var Patch $patch */
         foreach ($patches as $patch) {
-            if ($patch->getId() == $newPatchId) {
-                continue;
-            }
-            $modifiedFiles = $this->getFiles($patch);
+            $modifiedFiles = $this->getFiles($patch->getAbsolutePath());
             foreach ($newPatchFiles as $file) {
                 if (in_array($file, $modifiedFiles)) {
                     $requirePatches[] = $patch->getId();
@@ -108,7 +101,6 @@ class FindRequirePatches extends Command
             }
         }
         if (!empty($requirePatches)) {
-            $output->writeln('Found required patches for patch with id: ' . $newPatchId);
             $output->writeln('Required patches ids: ');
             $output->writeln(implode(', ', $requirePatches));
         } else {
@@ -117,22 +109,20 @@ class FindRequirePatches extends Command
     }
 
     /**
-     * @param Patch $patch
+     * @param string $path
      * @return array
-     *
-     *
-     * Move to StructureBuilder
      */
-    private function getFiles(Patch $patch)
+    private function getFiles(string $path)
     {
-        if ($this->filesystemDriver->isExists($patch->getAbsolutePath())) {
+        if ($this->filesystemDriver->isExists($path)) {
             preg_match_all(
                 '/---\s(?<fileName>.*)\s/',
-                $this->filesystemDriver->fileGetContents($patch->getAbsolutePath()),
+                $this->filesystemDriver->fileGetContents($path),
                 $matches
             );
+            return $matches['fileName'] ?? [];
         }
-        return $matches['fileName'] ?? [];
+        throw new \RuntimeException('Invalid path to patch');
     }
 
     /**
