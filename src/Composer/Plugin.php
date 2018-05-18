@@ -64,14 +64,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             ScriptEvents::POST_INSTALL_CMD => [
                 ['restoreLock', 0]
             ],
-            PackageEvents::POST_PACKAGE_UNINSTALL => [
-                ['restoreLock', 0]
-            ],
         ];
     }
 
     /**
-     * @param Event $event
+     * @param \Composer\EventDispatcher\Event $event
      */
     public function restoreLock(\Composer\EventDispatcher\Event $event)
     {
