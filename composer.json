@@ -30,7 +30,7 @@
     "psr-4": {
       "Magento\\SetPatches\\": "src"
     }
-  }
+  },
   "extra": {
     "class": "\\Magento\\SetPatches\\Composer\\Plugin"
   }
