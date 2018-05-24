@@ -1,1 +1,1 @@
-# magento2-patches-tool
+# support-patches
