@@ -72,7 +72,7 @@ class PatchStructureBuilder
         $dependants = [];
         /** @var Patch $patch */
         foreach ($patches as $index => $patch) {
-            if ($patch->getAfter() == $patchIndex) {
+            if ($patch->getAfter() !== null && $patch->getAfter() == $patchIndex) {
                 $dependants[$index] = $patch;
                 $dependants = array_replace($dependants, $this->getPatchDependants($index, $patches));
             }
