@@ -1,8 +1,13 @@
 {
   "name": "magento-set/magento2-patches-tool",
   "description": "Magento 2 patches",
+<<<<<<< HEAD
   "type":"composer-plugin",
   "version": "100.2.1",
+=======
+  "version": "100.2.1",
+  "type":"composer-plugin",
+>>>>>>> 1de3610bc65a98f1ca872bd2b534ccf946fedeec
   "license": [
     "OSL-3.0",
     "AFL-3.0"
