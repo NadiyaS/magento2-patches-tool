@@ -63,7 +63,6 @@ class InstanceProvider
         if (!$this->filesystemDriver->isDirectory($instancePath)) {
             $this->filesystemDriver->createDirectory($instancePath);
             $this->filesystemDriver->copy($instanceDir . '/composer.json', $instancePath . '/composer.json');
-            $this->filesystemDriver->copy($instanceDir . '/auth.json', $instancePath . '/auth.json');
 
             $this->shell->execute(
                 "cd $instancePath && composer require magento/project-enterprise-edition $version 2>&1"
