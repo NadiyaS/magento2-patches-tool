@@ -59,7 +59,8 @@ class PatchInstaller extends LibraryInstaller
         $backupCommand = $this->getApplication()->find(BackupPatch::NAME);
         $backupCommand->run(
             new ArrayInput([
-                '--' . Apply::OPTION_PACKAGE_NAME => $target->getName()
+                '--' . Apply::OPTION_PACKAGE_NAME => $target->getName(),
+                '--' . Apply::OPTION_PACKAGE_VERSION => $initial->getVersion()
             ]),
             $output
         );
