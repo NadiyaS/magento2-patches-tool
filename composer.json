@@ -1,7 +1,8 @@
 {
-  "name": "magento-set/magento2-patches-tool",
+  "name": "magento/magento2-patches-tool",
   "description": "Magento 2 patches",
   "type":"composer-plugin",
+  "version": "100.0.0",
   "license": [
     "OSL-3.0",
     "AFL-3.0"
@@ -20,7 +21,6 @@
     "psr/container": "^1.0",
     "symfony/console": "^2.6",
     "illuminate/container": "^5.5",
-    "illuminate/support": "5.5.*",
     "composer/composer": "^1.0",
     "composer/semver": "^1.4",
     "monolog/monolog": "^1.17",
