@@ -99,6 +99,11 @@ class Remove extends Command
         }
         /** @var Patch $patch */
         foreach (array_reverse($patches) as $patch) {
+            if ($patch->getAction() !== \Magento\SetPatches\Data\Patch::ACTION_APPLY
+                && $patch->getStatus() !== \Magento\SetPatches\Data\Patch::STATUS_DONE
+            ) {
+                continue;
+            }
             $this->revertAction->execute($patch, $instance);
             $output->writeln(sprintf('Patch  %s has been reverted.', $patch->getName()));
         }
