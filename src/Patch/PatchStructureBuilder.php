@@ -48,9 +48,9 @@ class PatchStructureBuilder
             $patch->setAbsolutePath($this->getPatchPath($patchData[self::PATCH_NAME], $package));
             $patch->setRequire($patchData[self::REQUIRE] ?? []);
             $patch->setAfter($patchData[self::AFTER] ?? null);
+            $patch->setAction($patchData[self::ACTION] ?? null);
+            $patch->setStatus($patchData[self::STATUS] ?? null);
             $patch->setPackage($package);
-            $patch->setAction($patchData[self::ACTION]);
-            $patch->setStatus($patchData[self::STATUS]);
 
             $patches[$index] = $patch;
         }
