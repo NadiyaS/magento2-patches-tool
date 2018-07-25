@@ -49,10 +49,6 @@ class RevertAction implements ActionInterface
      */
     public function execute(Patch $patch, Instance $instance)
     {
-        if ($patch->getStatus() !== Patch::STATUS_PENDING) {
-            return [];
-        }
-
         $localStorage = $this->lockStorageFactory->create($instance);
         try {
             $output = $this->shell->execute(
