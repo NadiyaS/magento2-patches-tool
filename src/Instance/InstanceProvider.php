@@ -93,7 +93,7 @@ class InstanceProvider
      */
     public function getRootInstance()
     {
-        return $this->instanceFactory->create(realpath(PACKAGE_BP . '/../../../'));
+        return $this->instanceFactory->create(realpath(BASE_DIR));
     }
 
     /**

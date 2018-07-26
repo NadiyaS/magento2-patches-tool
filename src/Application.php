@@ -92,20 +92,20 @@ class Application extends \Symfony\Component\Console\Application
         $this->container->singleton(RestoreLock::class, function () use($container) {
             return new RestoreLock(
                 $container->makeWith(JsonFile::class, [
-                    'path' => PACKAGE_BP . '/../../../composer.lock'
+                    'path' => BASE_DIR . '/composer.lock'
                 ]),
                 $container->makeWith(JsonFile::class, [
-                    'path' => PACKAGE_BP . '/../../../composer.lock.tmp'
+                    'path' => BASE_DIR . '/composer.lock.tmp'
                 ])
             );
         });
         $this->container->singleton(BackupLock::class, function () use($container) {
             return new BackupLock(
                 $container->makeWith(JsonFile::class, [
-                    'path' => PACKAGE_BP . '/../../../composer.lock'
+                    'path' => BASE_DIR . '/composer.lock'
                 ]),
                 $container->makeWith(JsonFile::class, [
-                    'path' => PACKAGE_BP . '/../../../composer.lock.tmp'
+                    'path' => BASE_DIR . '/composer.lock.tmp'
                 ])
             );
         });
