@@ -109,7 +109,7 @@ class ApplyAction implements ActionInterface
         );
 
         var_dump("\n ================================================= \n");
-        var_dump($patch->getAbsolutePath());
+        var_dump($instance->getPath() . '/' . $patch->getAbsolutePath());
         var_dump("\n ================================================= \n");
         var_dump($output);
         var_dump("\n ================================================= \n");
