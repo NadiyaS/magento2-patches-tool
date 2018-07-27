@@ -57,6 +57,9 @@ class BackupLock extends Command
         if ($this->rootTmpLockFile->exists()) {
             return 0;
         }
+        if (!$this->rootLockFile->exists()) {
+            return 0;
+        }
         $this->rootTmpLockFile->write($this->rootLockFile->read());
         return 0;
     }
