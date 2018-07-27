@@ -108,6 +108,12 @@ class ApplyAction implements ActionInterface
             'cd ' . $instance->getPath() . ' && git apply -v ' . $patch->getAbsolutePath() . ' 2>&1'
         );
 
+        var_dump("\n ================================================= \n");
+        var_dump($patch->getAbsolutePath());
+        var_dump("\n ================================================= \n");
+        var_dump($output);
+        var_dump("\n ================================================= \n");
+
         $patch->setStatus(Patch::STATUS_DONE);
 
         return ['modifiedFiles' => $this->outputMatcher->getModifiedFiles($output)];

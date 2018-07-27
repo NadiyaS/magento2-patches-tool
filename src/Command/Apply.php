@@ -137,9 +137,6 @@ class Apply extends Command
             $instance = $this->instanceProvider->getRootInstance();
         }
 
-        var_dump("\n\n\n ================================================= \n");
-        var_dump($instance->getPath());
-        var_dump("\n\n\n ================================================= \n");
         $patches = $this->patchesProvider->get(
             $instance,
             $package,
