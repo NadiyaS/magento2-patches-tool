@@ -169,7 +169,7 @@ class Apply extends Command
                 $output->writeln($patch->getAction() . ' action could not be found.');
             }
         }
-        die("aaa");
+
         if ($patches) {
             $output->writeln('Patching finished.');
         }
