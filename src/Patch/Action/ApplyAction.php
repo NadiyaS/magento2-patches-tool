@@ -92,7 +92,6 @@ class ApplyAction implements ActionInterface
      */
     private function apply(Patch $patch, Instance $instance)
     {
-        die("aaa");
         if (!empty($patch->getRequire())) {
             foreach ($patch->getRequire() as $constraint => $version) {
                 if (!$this->matchConstraint($constraint, $version, $instance)) {
@@ -106,7 +105,7 @@ class ApplyAction implements ActionInterface
         }
 
         $output = $this->shell->execute(
-            'cd ' . $instance->getPath() . ' && git apply -v ' . $patch->getAbsolutePath() . ' 2>&1'
+            'cd ' . $instance->getPath() . ' && git apply -v ' . $patch->getAbsolutePath()
         );
 
         var_dump("\n ================================================= \n");
