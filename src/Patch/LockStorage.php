@@ -73,10 +73,14 @@ class LockStorage
             return [];
         }
 
-        $patches = $this->patchStructureBuilder->build(
-            $lockData[$package->getName()][self::PROCESSED_PATCHES],
-            $package
-        );
+        $processedPatches = [];
+
+        foreach ($lockData[$package->getName()][self::PROCESSED_PATCHES] as $key => $processedPatch) {
+            unset($processedPatch['status']);
+            $processedPatches[$key] = $processedPatch;
+        }
+
+        $patches = $this->patchStructureBuilder->build($processedPatches, $package);
 
         return $patches;
     }

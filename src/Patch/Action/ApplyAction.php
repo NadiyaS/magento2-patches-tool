@@ -105,14 +105,8 @@ class ApplyAction implements ActionInterface
         }
 
         $output = $this->shell->execute(
-            'cd ' . $instance->getPath() . ' && git apply -v ' . $patch->getAbsolutePath()
+            'cd ' . $instance->getPath() . ' && git apply -v ' . $patch->getAbsolutePath() . ' 2>&1'
         );
-
-        var_dump("\n ================================================= \n");
-        var_dump($instance->getPath() . '/' . $patch->getAbsolutePath());
-        var_dump("\n ================================================= \n");
-        var_dump($output);
-        var_dump("\n ================================================= \n");
 
         $patch->setStatus(Patch::STATUS_DONE);
 
