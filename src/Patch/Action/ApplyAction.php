@@ -92,6 +92,7 @@ class ApplyAction implements ActionInterface
      */
     private function apply(Patch $patch, Instance $instance)
     {
+        die("aaa");
         if (!empty($patch->getRequire())) {
             foreach ($patch->getRequire() as $constraint => $version) {
                 if (!$this->matchConstraint($constraint, $version, $instance)) {

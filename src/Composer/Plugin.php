@@ -41,6 +41,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
+        die("aaa");
         $this->composer = $composer;
         $this->io = $io;
         $installer = new PatchInstaller($io, $composer);
@@ -98,6 +99,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostUpdate(Event $event)
     {
+        die("aaa");
         $output = new ConsoleOutput();
 
         $application = new Application();
