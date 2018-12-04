@@ -1,17 +1,11 @@
 {
-  "name": "magento/magento2-patches-tool",
+  "name": "NadiyaS/magento2-patches-tool",
   "description": "Magento 2 patches",
   "type":"composer-plugin",
   "version": "100.0.13",
   "license": [
     "OSL-3.0",
     "AFL-3.0"
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://repo.magento.com/"
-    }
   ],
   "minimum-stability": "dev",
   "prefer-stable": true,
