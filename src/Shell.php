@@ -5,6 +5,7 @@
  */
 namespace Magento\SetPatches;
 
+
 /**
  * Shell wrapper.
  */
